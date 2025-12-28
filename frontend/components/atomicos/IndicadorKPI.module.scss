@@ -1,0 +1,45 @@
+@use '@/styles/theme' as *;
+
+.card {
+  @include tarjeta;
+  padding: 14px 16px;
+  display: grid;
+  gap: 8px;
+  border-left: 3px solid rgba($cobre, 0.6);
+}
+
+.top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.label {
+  color: $texto-secundario;
+  font-size: 13px;
+  margin: 0;
+}
+
+.valor {
+  margin: 0;
+  font-size: 26px;
+}
+
+.delta {
+  color: rgba(230, 179, 126, 0.9);
+  font-size: 13px;
+}
+
+.hint {
+  margin: 0;
+  color: rgba(255, 255, 255, 0.7);
+  font-size: 12px;
+}
+
+.positivo {
+  border-left-color: rgba(69, 214, 150, 0.9);
+}
+
+.negativo {
+  border-left-color: rgba(255, 99, 132, 0.9);
+}

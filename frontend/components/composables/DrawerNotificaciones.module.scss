@@ -1,0 +1,58 @@
+@use '@/styles/theme' as *;
+
+.wrap {
+  position: relative;
+}
+
+.toggle {
+  padding: 10px 12px;
+  border-radius: 12px;
+  border: 1px solid $bordes;
+  background: rgba(255,255,255,0.04);
+  color: $texto;
+  cursor: pointer;
+}
+
+.drawer {
+  position: fixed;
+  top: 0;
+  right: 0;
+  width: 340px;
+  height: 100vh;
+  padding: 20px;
+  background: rgba(15,15,15,0.96);
+  border-left: 1px solid $bordes;
+  box-shadow: -12px 0 40px rgba(0,0,0,0.4);
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16px;
+}
+
+.list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.item {
+  padding: 12px;
+  border-radius: 12px;
+  border: 1px solid rgba($cobre, 0.25);
+  background: rgba(255,255,255,0.02);
+}
+
+.unread {
+  border-color: rgba($cobre, 0.6);
+}
+
+.titulo {
+  font-weight: 700;
+}
+
+.msg {
+  color: $texto-secundario;
+}

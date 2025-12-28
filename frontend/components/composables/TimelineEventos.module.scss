@@ -1,0 +1,43 @@
+@use '@/styles/theme' as *;
+
+.timeline {
+  @include tarjeta;
+  padding: 14px;
+  display: grid;
+  gap: 12px;
+}
+
+.item {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 12px;
+  align-items: start;
+}
+
+.dot {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  margin-top: 6px;
+  background: $cobre;
+  box-shadow: 0 0 0 6px rgba($cobre, 0.12);
+}
+
+.fecha {
+  margin: 0;
+  font-size: 12px;
+  color: $texto-secundario;
+}
+
+.titulo {
+  margin: 2px 0;
+}
+
+.desc {
+  margin: 0;
+  color: rgba(255, 255, 255, 0.8);
+}
+
+.programado { background: rgba(230, 179, 126, 1); box-shadow: 0 0 0 6px rgba($cobre, 0.12); }
+.hecho { background: #45d696; box-shadow: 0 0 0 6px rgba(69, 214, 150, 0.18); }
+.atrasado { background: #ff6384; box-shadow: 0 0 0 6px rgba(255, 99, 132, 0.18); }

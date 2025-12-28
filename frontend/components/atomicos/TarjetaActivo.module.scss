@@ -1,0 +1,38 @@
+@use '@/styles/theme' as *;
+
+.card {
+  @include tarjeta;
+  padding: 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  cursor: pointer;
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  color: $cobre;
+}
+
+.desc {
+  color: $texto-secundario;
+  line-height: 1.5;
+}
+
+.meta {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  color: $texto;
+}
+
+.precio {
+  font-weight: 700;
+}
+
+.rend {
+  color: rgba(102, 255, 204, 0.9);
+  font-weight: 700;
+}

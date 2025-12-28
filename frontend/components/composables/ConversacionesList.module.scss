@@ -1,0 +1,39 @@
+@use '@/styles/theme' as *;
+
+.list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.item {
+  text-align: left;
+  padding: 12px;
+  border-radius: 12px;
+  border: 1px solid rgba($cobre, 0.25);
+  background: rgba(255,255,255,0.03);
+  color: $texto;
+  cursor: pointer;
+}
+
+.top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.usuario {
+  font-weight: 700;
+}
+
+.badge {
+  background: rgba($cobre, 0.2);
+  color: #0b0b0b;
+  border-radius: 12px;
+  padding: 4px 8px;
+}
+
+.ultimo {
+  color: $texto-secundario;
+  margin-top: 4px;
+}

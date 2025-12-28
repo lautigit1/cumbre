@@ -1,0 +1,17 @@
+@use '@/styles/theme' as *;
+
+.input {
+  width: 100%;
+  padding: 12px 14px;
+  border-radius: 12px;
+  border: 1px solid $bordes;
+  background: rgba(255, 255, 255, 0.03);
+  color: $texto;
+  outline: none;
+  @include transition-base;
+}
+
+.input:focus {
+  border-color: rgba($cobre, 0.8);
+  box-shadow: 0 0 0 3px rgba($cobre, 0.18);
+}

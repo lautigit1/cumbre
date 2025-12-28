@@ -1,0 +1,55 @@
+@use '@/styles/theme' as *;
+
+.tableWrap {
+  @include tarjeta;
+  padding: 12px;
+  display: grid;
+  gap: 10px;
+}
+
+.header, .row {
+  display: grid;
+  grid-template-columns: 1.4fr 0.8fr 0.8fr 0.9fr 0.8fr 1fr;
+  gap: 10px;
+  align-items: center;
+}
+
+.header {
+  color: $texto-secundario;
+  font-size: 13px;
+}
+
+.body {
+  display: grid;
+  gap: 8px;
+}
+
+.row {
+  padding: 10px;
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid rgba($cobre, 0.2);
+  border-radius: 12px;
+}
+
+.concepto {
+  font-weight: 600;
+}
+
+.tipo {
+  text-transform: capitalize;
+}
+
+.monto {
+  color: rgba(230, 179, 126, 0.9);
+}
+
+.badge {
+  padding: 6px 10px;
+  border-radius: 12px;
+  font-size: 12px;
+  text-align: center;
+}
+
+.pendiente { background: rgba(230, 179, 126, 0.15); color: $texto; }
+.ejecutada { background: rgba(69, 214, 150, 0.18); color: #d8ffe8; }
+.fallida { background: rgba(255, 99, 132, 0.18); color: #ffd9e3; }

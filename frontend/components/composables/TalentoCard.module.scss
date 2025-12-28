@@ -1,0 +1,54 @@
+@use '@/styles/theme' as *;
+
+.card {
+  @include tarjeta;
+  padding: 16px;
+  display: grid;
+  gap: 12px;
+}
+
+.top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.nombre {
+  margin: 0;
+  font-weight: 700;
+}
+
+.rol {
+  color: $texto-secundario;
+  font-size: 13px;
+}
+
+.skills {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.skill {
+  padding: 6px 10px;
+  border-radius: 10px;
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba($cobre, 0.25);
+  font-size: 12px;
+}
+
+.footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.propuestas {
+  color: $texto-secundario;
+}
+
+.actions {
+  display: flex;
+  gap: 8px;
+}

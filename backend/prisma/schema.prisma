@@ -1,0 +1,459 @@
+// Generador y fuente de datos
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = "file:./dev.db"
+}
+
+// ============================================
+// ENUMS
+// ============================================
+
+enum TipoUsuario {
+  ESTUDIANTE
+  PROFESIONAL
+  EMPRESA
+  INVERSOR
+  ADMINISTRADOR
+}
+
+enum EstadoProyecto {
+  BORRADOR
+  PUBLICADO
+  EN_PROGRESO
+  COMPLETADO
+  CANCELADO
+}
+
+enum EstadoPostulacion {
+  PENDIENTE
+  ACEPTADA
+  RECHAZADA
+  CANCELADA
+}
+
+enum NivelHabilidad {
+  BASICO
+  INTERMEDIO
+  AVANZADO
+  EXPERTO
+}
+
+enum TipoActivo {
+  INMUEBLE
+  PROYECTO_TECNOLOGICO
+  EMPRESA
+  INFRAESTRUCTURA
+  OTRO
+}
+
+enum EstadoActivo {
+  DISPONIBLE
+  EN_FINANCIACION
+  FINANCIADO
+  INACTIVO
+}
+
+enum TipoTransaccion {
+  INVERSION
+  RETIRO
+  TRANSFERENCIA
+  RECOMPENSA
+  PAGO_PROYECTO
+}
+
+enum EstadoTransaccion {
+  PENDIENTE
+  COMPLETADA
+  FALLIDA
+  REVERTIDA
+}
+
+enum TipoNotificacion {
+  SISTEMA
+  PROYECTO
+  INVERSION
+  MENSAJE
+  HITO
+  POSTULACION
+}
+
+enum EstadoMensaje {
+  ENVIADO
+  ENTREGADO
+  LEIDO
+}
+
+// ============================================
+// ENTIDADES PRINCIPALES
+// ============================================
+
+model Usuario {
+  id                  String            @id @default(uuid())
+  nombre              String
+  apellido            String
+  correo              String            @unique
+  clave               String
+  legajoUtn           String?           @unique
+  tipoUsuario         TipoUsuario       @default(ESTUDIANTE)
+  reputacion          Int               @default(0)
+  
+  // Campos de seguridad y biometría
+  patrones_biometricos Json?
+  intentos_fallidos   Int               @default(0)
+  bloqueado           Boolean           @default(false)
+  ultima_sesion       DateTime?
+  
+  // Tokens
+  refresh_token       String?
+  
+  // Timestamps
+  creado_en           DateTime          @default(now())
+  actualizado_en      DateTime          @updatedAt
+  
+  // Relaciones
+  proyectos_creados   Proyecto[]        @relation("CreadorProyecto")
+  postulaciones       Postulacion[]
+  habilidades         UsuarioHabilidad[]
+  inversiones         Inversion[]
+  transacciones_enviadas Transaccion[] @relation("Remitente")
+  transacciones_recibidas Transaccion[] @relation("Destinatario")
+  activos_creados     Activo[]          @relation("CreadorActivo")
+  notificaciones      Notificacion[]
+  mensajes_enviados   Mensaje[]         @relation("Remitente")
+  mensajes_recibidos  Mensaje[]         @relation("Destinatario")
+  reviews_escritas    Review[]          @relation("Autor")
+  reviews_recibidas   Review[]          @relation("Receptor")
+  favoritos           Favorito[]
+  
+  @@map("usuarios")
+}
+
+model Proyecto {
+  id                  String            @id @default(uuid())
+  titulo              String
+  descripcion         String
+  requisitos          String?
+  presupuesto         Float?
+  estado              EstadoProyecto    @default(BORRADOR)
+  fecha_inicio        DateTime?
+  fecha_fin           DateTime?
+  
+  // Metadata
+  ubicacion           String?
+  modalidad           String?           // Presencial, Remoto, Híbrido
+  duracion_estimada   Int?              // En días
+  
+  // Relaciones
+  creador_id          String
+  creador             Usuario           @relation("CreadorProyecto", fields: [creador_id], references: [id], onDelete: Cascade)
+  
+  habilidades_requeridas ProyectoHabilidad[]
+  postulaciones       Postulacion[]
+  hitos               HitoProyecto[]
+  
+  // Timestamps
+  creado_en           DateTime          @default(now())
+  actualizado_en      DateTime          @updatedAt
+  
+  @@index([creador_id])
+  @@index([estado])
+  @@map("proyectos")
+}
+
+model Habilidad {
+  id                  String            @id @default(uuid())
+  nombre              String            @unique
+  categoria           String
+  descripcion         String?
+  
+  // Relaciones
+  usuarios            UsuarioHabilidad[]
+  proyectos           ProyectoHabilidad[]
+  
+  // Timestamps
+  creado_en           DateTime          @default(now())
+  actualizado_en      DateTime          @updatedAt
+  
+  @@index([categoria])
+  @@map("habilidades")
+}
+
+// Tabla intermedia: Usuario <-> Habilidad (con nivel)
+model UsuarioHabilidad {
+  id                  String            @id @default(uuid())
+  usuario_id          String
+  habilidad_id        String
+  nivel               NivelHabilidad    @default(BASICO)
+  años_experiencia    Int               @default(0)
+  certificaciones     Json?             // Array de URLs o detalles
+  
+  // Relaciones
+  usuario             Usuario           @relation(fields: [usuario_id], references: [id], onDelete: Cascade)
+  habilidad           Habilidad         @relation(fields: [habilidad_id], references: [id], onDelete: Cascade)
+  
+  // Timestamps
+  creado_en           DateTime          @default(now())
+  actualizado_en      DateTime          @updatedAt
+  
+  @@unique([usuario_id, habilidad_id])
+  @@index([usuario_id])
+  @@index([habilidad_id])
+  @@map("usuario_habilidades")
+}
+
+// Tabla intermedia: Proyecto <-> Habilidad (requerida)
+model ProyectoHabilidad {
+  id                  String            @id @default(uuid())
+  proyecto_id         String
+  habilidad_id        String
+  nivel_requerido     NivelHabilidad    @default(INTERMEDIO)
+  
+  // Relaciones
+  proyecto            Proyecto          @relation(fields: [proyecto_id], references: [id], onDelete: Cascade)
+  habilidad           Habilidad         @relation(fields: [habilidad_id], references: [id], onDelete: Cascade)
+  
+  // Timestamps
+  creado_en           DateTime          @default(now())
+  
+  @@unique([proyecto_id, habilidad_id])
+  @@index([proyecto_id])
+  @@index([habilidad_id])
+  @@map("proyecto_habilidades")
+}
+
+model Postulacion {
+  id                  String            @id @default(uuid())
+  proyecto_id         String
+  usuario_id          String
+  estado              EstadoPostulacion @default(PENDIENTE)
+  propuesta           String
+  tarifa_propuesta    Float?
+  
+  // Relaciones
+  proyecto            Proyecto          @relation(fields: [proyecto_id], references: [id], onDelete: Cascade)
+  usuario             Usuario           @relation(fields: [usuario_id], references: [id], onDelete: Cascade)
+  
+  // Timestamps
+  creado_en           DateTime          @default(now())
+  actualizado_en      DateTime          @updatedAt
+  
+  @@unique([proyecto_id, usuario_id])
+  @@index([proyecto_id])
+  @@index([usuario_id])
+  @@index([estado])
+  @@map("postulaciones")
+}
+
+model HitoProyecto {
+  id                  String            @id @default(uuid())
+  proyecto_id         String
+  titulo              String
+  descripcion         String?
+  completado          Boolean           @default(false)
+  fecha_completado    DateTime?
+  
+  // Relaciones
+  proyecto            Proyecto          @relation(fields: [proyecto_id], references: [id], onDelete: Cascade)
+  
+  // Timestamps
+  creado_en           DateTime          @default(now())
+  actualizado_en      DateTime          @updatedAt
+  
+  @@index([proyecto_id])
+  @@map("hitos_proyecto")
+}
+
+// ============================================
+// MÓDULO DE MERCADO DE ACTIVOS
+// ============================================
+
+model Activo {
+  id                  String            @id @default(uuid())
+  nombre              String
+  descripcion         String
+  tipo                TipoActivo
+  estado              EstadoActivo      @default(DISPONIBLE)
+  
+  // Valores
+  valor_total         Float
+  valor_tokenizado    Float             // Cuánto está disponible para inversión
+  precio_por_token    Float
+  tokens_totales      Int
+  tokens_vendidos     Int               @default(0)
+  
+  // Metadata
+  ubicacion           String?
+  imagenes            Json?             // Array de URLs
+  documentos          Json?             // Array de URLs
+  rentabilidad_estimada Float?
+  plazo_meses         Int?
+  
+  // Relaciones
+  creador_id          String
+  creador             Usuario           @relation("CreadorActivo", fields: [creador_id], references: [id], onDelete: Cascade)
+  
+  inversiones         Inversion[]
+  historial_precios   HistorialPrecio[] @relation("HistorialPrecios")
+  
+  // Timestamps
+  creado_en           DateTime          @default(now())
+  actualizado_en      DateTime          @updatedAt
+  
+  @@index([creador_id])
+  @@index([tipo])
+  @@index([estado])
+  @@map("activos")
+}
+
+model Inversion {
+  id                  String            @id @default(uuid())
+  activo_id           String
+  inversor_id         String
+  cantidad_tokens     Int
+  monto_invertido     Float
+  
+  // Metadata
+  rentabilidad_obtenida Float           @default(0)
+  
+  // Relaciones
+  activo              Activo            @relation(fields: [activo_id], references: [id], onDelete: Cascade)
+  inversor            Usuario           @relation(fields: [inversor_id], references: [id], onDelete: Cascade)
+  
+  // Timestamps
+  creado_en           DateTime          @default(now())
+  actualizado_en      DateTime          @updatedAt
+  
+  @@index([activo_id])
+  @@index([inversor_id])
+  @@map("inversiones")
+}
+
+model Transaccion {
+  id                  String            @id @default(uuid())
+  tipo                TipoTransaccion
+  estado              EstadoTransaccion @default(PENDIENTE)
+  monto               Float
+  descripcion         String?
+  
+  // Usuarios involucrados
+  remitente_id        String?
+  destinatario_id     String?
+  
+  // Metadata
+  metadata            Json?             // Información adicional según tipo
+  hash_transaccion    String?           @unique // Para futura integración blockchain
+  
+  // Relaciones
+  remitente           Usuario?          @relation("Remitente", fields: [remitente_id], references: [id], onDelete: SetNull)
+  destinatario        Usuario?          @relation("Destinatario", fields: [destinatario_id], references: [id], onDelete: SetNull)
+  
+  // Timestamps
+  creado_en           DateTime          @default(now())
+  actualizado_en      DateTime          @updatedAt
+  
+  @@index([remitente_id])
+  @@index([destinatario_id])
+  @@index([tipo])
+  @@index([estado])
+  @@map("transacciones")
+}
+
+model Notificacion {
+  id                  String            @id @default(uuid())
+  tipo                TipoNotificacion
+  titulo              String
+  mensaje             String
+  leida               Boolean           @default(false)
+  metadata            Json?
+  
+  // Relaciones
+  usuario_id          String
+  usuario             Usuario           @relation(fields: [usuario_id], references: [id], onDelete: Cascade)
+  
+  // Timestamps
+  creado_en           DateTime          @default(now())
+  
+  @@index([usuario_id])
+  @@index([leida])
+  @@map("notificaciones")
+}
+
+model Mensaje {
+  id                  String            @id @default(uuid())
+  contenido           String
+  estado              EstadoMensaje     @default(ENVIADO)
+  adjuntos            Json?             // URLs de archivos adjuntos
+  
+  // Relaciones
+  remitente_id        String
+  destinatario_id     String
+  remitente           Usuario           @relation("Remitente", fields: [remitente_id], references: [id], onDelete: Cascade)
+  destinatario        Usuario           @relation("Destinatario", fields: [destinatario_id], references: [id], onDelete: Cascade)
+  
+  // Timestamps
+  creado_en           DateTime          @default(now())
+  leido_en            DateTime?
+  
+  @@index([remitente_id])
+  @@index([destinatario_id])
+  @@index([estado])
+  @@map("mensajes")
+}
+
+model Review {
+  id                  String            @id @default(uuid())
+  calificacion        Int               // 1-5 estrellas
+  comentario          String?
+  tipo                String            // "PROYECTO", "USUARIO", "ACTIVO"
+  entidad_id          String            // ID del proyecto/usuario/activo
+  
+  // Relaciones
+  autor_id            String
+  receptor_id         String?
+  autor               Usuario           @relation("Autor", fields: [autor_id], references: [id], onDelete: Cascade)
+  receptor            Usuario?          @relation("Receptor", fields: [receptor_id], references: [id], onDelete: Cascade)
+  
+  // Timestamps
+  creado_en           DateTime          @default(now())
+  actualizado_en      DateTime          @updatedAt
+  
+  @@index([autor_id])
+  @@index([receptor_id])
+  @@index([tipo, entidad_id])
+  @@map("reviews")
+}
+
+model Favorito {
+  id                  String            @id @default(uuid())
+  tipo                String            // "PROYECTO", "ACTIVO"
+  entidad_id          String            // ID del proyecto/activo
+  
+  // Relaciones
+  usuario_id          String
+  usuario             Usuario           @relation(fields: [usuario_id], references: [id], onDelete: Cascade)
+  
+  // Timestamps
+  creado_en           DateTime          @default(now())
+  
+  @@unique([usuario_id, tipo, entidad_id])
+  @@index([usuario_id])
+  @@map("favoritos")
+}
+
+model HistorialPrecio {
+  id                  String            @id @default(uuid())
+  precio              Float
+  activo_id           String
+  activo              Activo            @relation("HistorialPrecios", fields: [activo_id], references: [id], onDelete: Cascade)
+  
+  // Timestamps
+  creado_en           DateTime          @default(now())
+  
+  @@index([activo_id])
+  @@index([creado_en])
+  @@map("historial_precios")
+}

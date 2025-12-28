@@ -1,0 +1,50 @@
+@use '@/styles/theme' as *;
+
+.chat {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  @include tarjeta;
+  padding: 16px;
+}
+
+.historial {
+  max-height: 420px;
+  overflow: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.bubble {
+  max-width: 70%;
+  padding: 12px 14px;
+  border-radius: 14px;
+  border: 1px solid rgba($cobre, 0.35);
+}
+
+.yo {
+  align-self: flex-end;
+  background: rgba($cobre, 0.18);
+  color: #0b0b0b;
+}
+
+.otro {
+  align-self: flex-start;
+  background: rgba(255,255,255,0.04);
+  color: $texto;
+}
+
+.status {
+  display: block;
+  margin-top: 6px;
+  font-size: 12px;
+  color: $texto-secundario;
+}
+
+.form {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 10px;
+  align-items: center;
+}

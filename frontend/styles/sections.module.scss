@@ -1,0 +1,46 @@
+@use '@/styles/theme' as *;
+
+.page {
+  min-height: 100vh;
+  padding: 32px 20px 64px;
+  display: grid;
+  gap: 20px;
+  background: $fondo;
+}
+
+.headerRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.card {
+  @include tarjeta;
+  padding: 20px;
+}
+
+.grid {
+  display: grid;
+  gap: 16px;
+}
+
+.twoCols {
+  grid-template-columns: 1.2fr 1fr;
+}
+
+.formGrid {
+  display: grid;
+  gap: 12px;
+}
+
+.pillRow {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  align-items: center;
+}
+
+.muted {
+  color: $texto-secundario;
+}

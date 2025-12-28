@@ -1,0 +1,21 @@
+@use '@/styles/theme' as *;
+
+.chip {
+  padding: 8px 14px;
+  border-radius: 999px;
+  border: 1px solid rgba($cobre, 0.35);
+  background: rgba(255,255,255,0.02);
+  color: $texto;
+  cursor: pointer;
+  @include transition-base;
+}
+
+.chip:hover {
+  border-color: rgba($cobre, 0.6);
+}
+
+.activo {
+  background: rgba($cobre, 0.16);
+  color: #0b0b0b;
+  border-color: rgba($cobre, 0.9);
+}

@@ -1,0 +1,38 @@
+@use '@/styles/theme' as *;
+
+.portfolio {
+  @include tarjeta;
+  padding: 20px;
+  display: grid;
+  gap: 14px;
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+
+  h3 {
+    margin: 4px 0;
+    font-size: 26px;
+  }
+}
+
+.label {
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: rgba(255, 255, 255, 0.7);
+  font-size: 12px;
+}
+
+.sub {
+  color: $texto-secundario;
+  font-size: 14px;
+}
+
+.grid {
+  display: grid;
+  gap: 12px;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+}

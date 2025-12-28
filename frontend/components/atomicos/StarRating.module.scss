@@ -1,0 +1,17 @@
+@use '@/styles/theme' as *;
+
+.wrap {
+  display: inline-flex;
+  gap: 4px;
+}
+
+.star {
+  stroke: rgba($cobre, 0.5);
+  fill: transparent;
+  transition: all 0.15s ease;
+}
+
+.full {
+  stroke: $cobre;
+  fill: rgba($cobre, 0.6);
+}

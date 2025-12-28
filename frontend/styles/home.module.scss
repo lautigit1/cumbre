@@ -1,0 +1,61 @@
+.hero {
+  min-height: 100vh;
+  display: grid;
+  place-items: center;
+  padding: 64px 24px;
+}
+
+.glass {
+  max-width: 720px;
+  padding: 48px;
+  border-radius: 24px;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(230, 179, 126, 0.35);
+  box-shadow: 0 24px 80px rgba(0, 0, 0, 0.45);
+}
+
+.kicker {
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: rgba(230, 179, 126, 0.8);
+  font-weight: 600;
+  margin-bottom: 12px;
+}
+
+.glass h1 {
+  font-size: clamp(36px, 5vw, 48px);
+  margin: 0 0 16px;
+}
+
+.lead {
+  color: rgba(255, 255, 255, 0.75);
+  margin: 0 0 24px;
+  line-height: 1.6;
+}
+
+.actions {
+  display: flex;
+  gap: 16px;
+  align-items: center;
+}
+
+.secundario {
+  padding: 12px 18px;
+  border: 1px solid rgba(230, 179, 126, 0.3);
+  border-radius: 12px;
+  color: rgba(230, 179, 126, 0.9);
+  text-decoration: none;
+  transition: all 0.2s ease;
+}
+
+.secundario:hover {
+  border-color: rgba(230, 179, 126, 0.6);
+  color: #fefefe;
+}
+
+.kpis {
+  margin-top: 26px;
+  display: grid;
+  gap: 10px;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+}
