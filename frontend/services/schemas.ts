@@ -1,9 +1,21 @@
 import { z } from 'zod';
 
 export const TokenSchema = z.object({
-  accessToken: z.string(),
-  refreshToken: z.string().optional(),
-});
+  access_token: z.string(),
+  refresh_token: z.string().optional(),
+  usuario: z.object({
+    id: z.string(),
+    nombre: z.string(),
+    apellido: z.string(),
+    correo: z.string().email(),
+    tipoUsuario: z.string(),
+    reputacion: z.number().optional(),
+  }).optional(),
+}).transform(data => ({
+  accessToken: data.access_token,
+  refreshToken: data.refresh_token,
+  usuario: data.usuario,
+}));
 
 export const UsuarioSchema = z.object({
   id: z.string(),

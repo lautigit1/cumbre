@@ -1,4 +1,4 @@
-import { ZodSchema } from 'zod';
+import { ZodType } from 'zod';
 import { EndpointKey, endpoints } from './endpoints';
 import { TokenPayload, TokenSchema } from './schemas';
 
@@ -42,7 +42,7 @@ type FetchOpts<T> = {
   body?: unknown;
   params?: Record<string, string | number>;
   query?: Record<string, string | number | undefined>;
-  schema?: ZodSchema<T>;
+  schema?: ZodType<T, any, unknown>;
   reintentos?: number;
 };
 

@@ -1,0 +1,224 @@
+$black: #030303;
+$dark: #0a0a0b;
+$copper: #E6B37E;
+$copper-light: #f5d4a8;
+$white: #fafafa;
+
+.page {
+  min-height: 100vh;
+  background: $black;
+  color: $white;
+}
+
+.header {
+  padding: 140px 40px 100px;
+  background: radial-gradient(ellipse 80% 50% at 50% -10%, rgba($copper, 0.08) 0%, transparent 60%);
+  border-bottom: 1px solid rgba($copper, 0.1);
+}
+
+.headerContent {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.backBtn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 20px;
+  background: rgba($white, 0.03);
+  border: 1px solid rgba($white, 0.1);
+  border-radius: 10px;
+  color: rgba($white, 0.7);
+  text-decoration: none;
+  font-size: 14px;
+  font-weight: 500;
+  transition: all 0.3s;
+  margin-bottom: 40px;
+
+  &:hover {
+    background: rgba($copper, 0.05);
+    border-color: rgba($copper, 0.3);
+    color: $white;
+  }
+}
+
+.title {
+  font-size: clamp(40px, 6vw, 64px);
+  font-weight: 700;
+  line-height: 1.1;
+  margin-bottom: 20px;
+}
+
+.gradient {
+  background: linear-gradient(135deg, $copper-light 0%, $copper 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.subtitle {
+  font-size: 20px;
+  color: rgba($white, 0.6);
+  max-width: 600px;
+}
+
+.content {
+  padding: 100px 40px;
+}
+
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.layout {
+  display: grid;
+  grid-template-columns: 1fr 1.5fr;
+  gap: 60px;
+
+  @media (max-width: 1024px) {
+    grid-template-columns: 1fr;
+  }
+}
+
+.info {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.infoCard {
+  padding: 32px;
+  background: rgba($white, 0.02);
+  border: 1px solid rgba($white, 0.08);
+  border-radius: 16px;
+  transition: all 0.3s;
+
+  &:hover {
+    background: rgba($copper, 0.03);
+    border-color: rgba($copper, 0.2);
+  }
+
+  svg {
+    color: $copper;
+    margin-bottom: 16px;
+  }
+
+  h3 {
+    font-size: 18px;
+    font-weight: 700;
+    margin-bottom: 12px;
+  }
+
+  p {
+    font-size: 15px;
+    color: rgba($white, 0.8);
+    margin: 0 0 4px 0;
+
+    &.secondary {
+      color: rgba($white, 0.5);
+      font-size: 14px;
+    }
+  }
+}
+
+.formWrapper {
+  padding: 48px;
+  background: rgba($white, 0.02);
+  border: 1px solid rgba($white, 0.08);
+  border-radius: 20px;
+
+  h2 {
+    font-size: 28px;
+    font-weight: 700;
+    margin-bottom: 32px;
+  }
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.formRow {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+
+  @media (max-width: 640px) {
+    grid-template-columns: 1fr;
+  }
+}
+
+.formGroup {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+
+  label {
+    font-size: 14px;
+    font-weight: 600;
+    color: rgba($white, 0.8);
+  }
+
+  input,
+  select,
+  textarea {
+    padding: 14px 18px;
+    background: rgba($black, 0.4);
+    border: 1px solid rgba($white, 0.1);
+    border-radius: 10px;
+    color: $white;
+    font-size: 15px;
+    font-family: inherit;
+    transition: all 0.3s;
+
+    &::placeholder {
+      color: rgba($white, 0.4);
+    }
+
+    &:focus {
+      outline: none;
+      border-color: rgba($copper, 0.5);
+      background: rgba($black, 0.6);
+      box-shadow: 0 0 0 4px rgba($copper, 0.1);
+    }
+  }
+
+  select {
+    cursor: pointer;
+    appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg width='12' height='8' viewBox='0 0 12 8' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M1 1L6 6L11 1' stroke='%23E6B37E' stroke-width='2' stroke-linecap='round'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 18px center;
+    padding-right: 48px;
+  }
+
+  textarea {
+    resize: vertical;
+    min-height: 120px;
+  }
+}
+
+.submitBtn {
+  padding: 16px 32px;
+  background: linear-gradient(135deg, $copper-light, $copper);
+  color: $black;
+  font-size: 16px;
+  font-weight: 700;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: all 0.3s;
+
+  &:hover {
+    box-shadow: 0 12px 36px rgba($copper, 0.4);
+    transform: translateY(-2px);
+  }
+
+  &:active {
+    transform: translateY(0);
+  }
+}

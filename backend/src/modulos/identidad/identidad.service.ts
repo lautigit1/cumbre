@@ -295,11 +295,11 @@ export class IdentidadService {
       this.jwtService.signAsync(payload, {
         secret: this.configService.get<string>('JWT_SECRET'),
         expiresIn: this.configService.get<string>('JWT_ACCESS_EXPIRATION') || '15m',
-      }),
+      } as any),
       this.jwtService.signAsync(payload, {
         secret: this.configService.get<string>('JWT_REFRESH_SECRET'),
         expiresIn: this.configService.get<string>('JWT_REFRESH_EXPIRATION') || '7d',
-      }),
+      } as any),
     ]);
 
     // Guardar el refresh token en la base de datos

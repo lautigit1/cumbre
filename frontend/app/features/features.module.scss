@@ -1,0 +1,195 @@
+$black: #030303;
+$dark: #0a0a0b;
+$copper: #E6B37E;
+$copper-light: #f5d4a8;
+$white: #fafafa;
+
+.page {
+  min-height: 100vh;
+  background: $black;
+  color: $white;
+}
+
+.header {
+  padding: 140px 40px 100px;
+  background: radial-gradient(ellipse 80% 50% at 50% -10%, rgba($copper, 0.08) 0%, transparent 60%);
+  border-bottom: 1px solid rgba($copper, 0.1);
+}
+
+.headerContent {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.backBtn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 20px;
+  background: rgba($white, 0.03);
+  border: 1px solid rgba($white, 0.1);
+  border-radius: 10px;
+  color: rgba($white, 0.7);
+  text-decoration: none;
+  font-size: 14px;
+  font-weight: 500;
+  transition: all 0.3s;
+  margin-bottom: 40px;
+
+  &:hover {
+    background: rgba($copper, 0.05);
+    border-color: rgba($copper, 0.3);
+    color: $white;
+  }
+}
+
+.title {
+  font-size: clamp(40px, 6vw, 64px);
+  font-weight: 700;
+  line-height: 1.1;
+  margin-bottom: 20px;
+}
+
+.gradient {
+  background: linear-gradient(135deg, $copper-light 0%, $copper 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.subtitle {
+  font-size: 20px;
+  color: rgba($white, 0.6);
+  max-width: 600px;
+}
+
+.featuresSection {
+  padding: 100px 40px;
+}
+
+.container {
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(360px, 1fr));
+  gap: 32px;
+  
+  @media (max-width: 768px) {
+    grid-template-columns: 1fr;
+  }
+}
+
+.card {
+  padding: 40px;
+  background: rgba($white, 0.02);
+  border: 1px solid rgba($white, 0.08);
+  border-radius: 20px;
+  transition: all 0.3s ease;
+
+  &:hover {
+    background: rgba($copper, 0.03);
+    border-color: rgba($copper, 0.2);
+    box-shadow: 0 20px 60px rgba($copper, 0.15);
+  }
+}
+
+.cardIcon {
+  width: 64px;
+  height: 64px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, rgba($copper, 0.1), rgba($copper, 0.05));
+  border: 1px solid rgba($copper, 0.2);
+  border-radius: 16px;
+  color: $copper;
+  margin-bottom: 24px;
+}
+
+.cardTitle {
+  font-size: 22px;
+  font-weight: 700;
+  margin-bottom: 12px;
+  color: $white;
+}
+
+.cardDesc {
+  font-size: 15px;
+  line-height: 1.6;
+  color: rgba($white, 0.6);
+  margin-bottom: 24px;
+}
+
+.benefitsList {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+
+  li {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    font-size: 14px;
+    color: rgba($white, 0.7);
+
+    svg {
+      color: $copper;
+      flex-shrink: 0;
+      margin-top: 2px;
+    }
+  }
+}
+
+.ctaSection {
+  padding: 100px 40px;
+  background: radial-gradient(ellipse 70% 50% at 50% 50%, rgba($copper, 0.08) 0%, transparent 70%);
+}
+
+.ctaCard {
+  max-width: 700px;
+  margin: 0 auto;
+  padding: 60px 40px;
+  background: rgba($white, 0.02);
+  border: 1px solid rgba($copper, 0.15);
+  border-radius: 24px;
+  text-align: center;
+
+  h2 {
+    font-size: 36px;
+    font-weight: 700;
+    margin: 24px 0 16px;
+  }
+
+  p {
+    font-size: 18px;
+    color: rgba($white, 0.6);
+    margin-bottom: 32px;
+  }
+}
+
+.ctaIcon {
+  color: $copper;
+}
+
+.ctaBtn {
+  display: inline-flex;
+  padding: 16px 40px;
+  background: linear-gradient(135deg, $copper-light, $copper);
+  color: $black;
+  font-size: 16px;
+  font-weight: 700;
+  border-radius: 12px;
+  text-decoration: none;
+  transition: all 0.3s;
+
+  &:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 12px 36px rgba($copper, 0.4);
+  }
+}

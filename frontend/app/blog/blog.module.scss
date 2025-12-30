@@ -1,0 +1,219 @@
+$black: #030303;
+$dark: #0a0a0b;
+$copper: #E6B37E;
+$copper-light: #f5d4a8;
+$white: #fafafa;
+
+.page {
+  min-height: 100vh;
+  background: $black;
+  color: $white;
+}
+
+.header {
+  padding: 140px 40px 100px;
+  background: radial-gradient(ellipse 80% 50% at 50% -10%, rgba($copper, 0.08) 0%, transparent 60%);
+  border-bottom: 1px solid rgba($copper, 0.1);
+}
+
+.headerContent {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.backBtn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 20px;
+  background: rgba($white, 0.03);
+  border: 1px solid rgba($white, 0.1);
+  border-radius: 10px;
+  color: rgba($white, 0.7);
+  text-decoration: none;
+  font-size: 14px;
+  font-weight: 500;
+  transition: all 0.3s;
+  margin-bottom: 40px;
+
+  &:hover {
+    background: rgba($copper, 0.05);
+    border-color: rgba($copper, 0.3);
+    color: $white;
+  }
+}
+
+.title {
+  font-size: clamp(40px, 6vw, 64px);
+  font-weight: 700;
+  line-height: 1.1;
+  margin-bottom: 20px;
+}
+
+.gradient {
+  background: linear-gradient(135deg, $copper-light 0%, $copper 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.subtitle {
+  font-size: 20px;
+  color: rgba($white, 0.6);
+  max-width: 600px;
+}
+
+.content {
+  padding: 100px 40px;
+}
+
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.featured {
+  margin-bottom: 80px;
+}
+
+.featuredCard {
+  position: relative;
+  padding: 60px;
+  background: rgba($copper, 0.03);
+  border: 2px solid rgba($copper, 0.2);
+  border-radius: 24px;
+  overflow: hidden;
+
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 4px;
+    background: linear-gradient(90deg, $copper-light, $copper);
+  }
+}
+
+.featuredBadge {
+  display: inline-block;
+  padding: 8px 16px;
+  background: linear-gradient(135deg, $copper-light, $copper);
+  color: $black;
+  font-size: 12px;
+  font-weight: 700;
+  border-radius: 6px;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-bottom: 24px;
+}
+
+.featuredContent {
+  h2 {
+    font-size: 36px;
+    font-weight: 700;
+    line-height: 1.2;
+    margin-bottom: 16px;
+    color: $white;
+  }
+
+  p {
+    font-size: 18px;
+    line-height: 1.6;
+    color: rgba($white, 0.7);
+    margin-bottom: 32px;
+  }
+}
+
+.meta {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  font-size: 14px;
+  color: rgba($white, 0.5);
+  margin-bottom: 20px;
+
+  span {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+
+  svg {
+    color: $copper;
+  }
+}
+
+.readMore {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 14px 32px;
+  background: linear-gradient(135deg, $copper-light, $copper);
+  color: $black;
+  font-weight: 600;
+  border-radius: 10px;
+  text-decoration: none;
+  transition: all 0.3s;
+
+  &:hover {
+    box-shadow: 0 12px 36px rgba($copper, 0.4);
+    transform: translateY(-2px);
+  }
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
+  gap: 32px;
+
+  @media (max-width: 768px) {
+    grid-template-columns: 1fr;
+  }
+}
+
+.card {
+  padding: 32px;
+  background: rgba($white, 0.02);
+  border: 1px solid rgba($white, 0.08);
+  border-radius: 16px;
+  transition: all 0.3s;
+
+  &:hover {
+    background: rgba($copper, 0.03);
+    border-color: rgba($copper, 0.2);
+    transform: translateY(-8px);
+    box-shadow: 0 20px 60px rgba($copper, 0.15);
+  }
+
+  h3 {
+    font-size: 20px;
+    font-weight: 700;
+    line-height: 1.3;
+    margin-bottom: 12px;
+    color: $white;
+  }
+
+  p {
+    font-size: 15px;
+    line-height: 1.6;
+    color: rgba($white, 0.6);
+    margin-bottom: 20px;
+  }
+}
+
+.cardLink {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  color: $copper;
+  font-size: 14px;
+  font-weight: 600;
+  text-decoration: none;
+  transition: all 0.3s;
+
+  &:hover {
+    color: $copper-light;
+    gap: 10px;
+  }
+}

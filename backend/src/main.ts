@@ -14,15 +14,13 @@ async function bootstrap() {
 
   // Configuración de CORS
   app.enableCors({
-    origin: ['http://localhost:3000', 'http://localhost:4200'],
+    origin: ['http://localhost:3000', 'http://localhost:3001', 'http://localhost:3002', 'http://localhost:4200'],
     credentials: true,
   });
 
   // Prefijo global de la API
   const apiPrefix = configService.get<string>('API_PREFIX') || 'api/v1';
-  app.setGlobalPrefix(apiPrefix, {
-    exclude: ['/documentacion'], // Excluir Swagger del prefijo
-  });
+  app.setGlobalPrefix(apiPrefix);
 
   // Validación global con class-validator (backup para Zod)
   app.useGlobalPipes(
@@ -100,7 +98,7 @@ La mayoría de los endpoints requieren autenticación mediante Bearer Token (JWT
     const document = SwaggerModule.createDocument(app, config);
     const swaggerPath = configService.get<string>('SWAGGER_PATH') || 'documentacion';
     
-    SwaggerModule.setup(swaggerPath, app, document, {
+    SwaggerModule.setup(`${apiPrefix}/${swaggerPath}`, app, document, {
       customSiteTitle: 'CUMBRE API - Documentación',
       customCss: `
         .swagger-ui .topbar { display: none; }

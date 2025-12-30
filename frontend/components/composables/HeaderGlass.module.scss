@@ -4,50 +4,146 @@
   position: sticky;
   top: 0;
   z-index: 30;
-  display: grid;
-  grid-template-columns: auto 1fr auto;
+  display: flex;
+  justify-content: space-between;
   align-items: center;
-  gap: 18px;
-  padding: 12px 18px;
+  gap: 24px;
+  padding: 16px 24px;
   @include glass(0.06);
+  border-bottom: 1px solid rgba($cobre, 0.1);
 }
 
 .brand {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  text-decoration: none;
+  transition: all 0.3s ease;
+
+  &:hover {
+    transform: translateY(-2px);
+    
+    .logoIcon {
+      box-shadow: 0 0 30px rgba($cobre, 0.6);
+    }
+  }
+}
+
+.logoIcon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 48px;
+  height: 48px;
+  background: linear-gradient(135deg, rgba($cobre, 0.2), rgba($cobre, 0.05));
+  border-radius: 14px;
+  border: 1px solid rgba($cobre, 0.3);
+  color: $cobre;
+  box-shadow: 0 0 20px rgba($cobre, 0.3), inset 0 0 15px rgba($cobre, 0.1);
+  transition: all 0.3s ease;
+}
+
+.brandText {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.brandName {
   font-weight: 800;
+  font-size: 20px;
   letter-spacing: 0.16em;
   color: $cobre;
+  text-shadow: 0 0 20px rgba($cobre, 0.5);
 }
 
-.nav {
+.brandTagline {
+  font-size: 10px;
+  font-weight: 500;
+  letter-spacing: 0.12em;
+  color: rgba($texto, 0.6);
+  text-transform: uppercase;
+}
+
+.spacer {
+  flex: 1;
+}
+
+.userSection {
   display: flex;
-  gap: 18px;
+  align-items: center;
+  gap: 12px;
+}
+
+.userMenuContainer {
+  position: relative;
+}
+
+.userAvatar {
+  display: flex;
+  align-items: center;
   justify-content: center;
-}
-
-.nav a {
-  color: $texto;
-  text-decoration: none;
-  padding: 8px 10px;
-  border-radius: 10px;
-  transition: all 0.15s ease;
-}
-
-.nav a:hover {
-  background: rgba(255,255,255,0.06);
-}
-
-.actions {
-  display: flex;
-  gap: 10px;
-  align-items: center;
-}
-
-.icono {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  color: $texto;
-  padding: 8px;
+  width: 40px;
+  height: 40px;
+  background: linear-gradient(135deg, rgba($cobre, 0.2), rgba($cobre, 0.1));
+  border: 1px solid rgba($cobre, 0.3);
   border-radius: 12px;
-  border: 1px solid rgba($cobre, 0.2);
+  color: $cobre;
+  font-weight: 700;
+  font-size: 14px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 0 15px rgba($cobre, 0.2);
+
+  &:hover {
+    transform: scale(1.05);
+    box-shadow: 0 0 25px rgba($cobre, 0.4);
+  }
+}
+
+.userMenu {
+  position: absolute;
+  top: calc(100% + 12px);
+  right: 0;
+  min-width: 200px;
+  background: rgba(13, 13, 13, 0.98);
+  backdrop-filter: blur(20px);
+  border: 1px solid rgba($cobre, 0.3);
+  border-radius: 16px;
+  padding: 8px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.6), 0 0 20px rgba($cobre, 0.3);
+  z-index: 1000;
+}
+
+.menuItem {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+  padding: 12px 16px;
+  color: rgba(255, 255, 255, 0.7);
+  font-size: 14px;
+  font-weight: 500;
+  text-decoration: none;
+  border: none;
+  background: transparent;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+
+  &:hover {
+    background: rgba($cobre, 0.15);
+    color: $cobre;
+  }
+
+  svg {
+    flex-shrink: 0;
+    color: currentColor;
+  }
+}
+
+.menuDivider {
+  height: 1px;
+  background: rgba($cobre, 0.2);
+  margin: 8px 4px;
 }

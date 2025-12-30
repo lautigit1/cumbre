@@ -1,7 +1,6 @@
 "use client";
 
 import styles from './ConversacionesList.module.scss';
-import { motion } from 'framer-motion';
 
 type Conversacion = {
   id: string;
@@ -17,12 +16,12 @@ type Props = {
 };
 
 export function ConversacionesList({ conversaciones, onSelect, activa }: Props) {
+  return (
     <div className={styles.list}>
-      {items.map((c) => (
-        <motion.button
+      {conversaciones.map((c) => (
+        <button
           key={c.id}
-          className={styles.item}
-          whileHover={{ y: -2 }}
+          className={`${styles.item} ${c.id === activa ? styles.active : ''}`}
           onClick={() => onSelect(c.id)}
         >
           <div className={styles.top}>
@@ -30,7 +29,7 @@ export function ConversacionesList({ conversaciones, onSelect, activa }: Props) 
             {c.noLeidos > 0 && <span className={styles.badge}>{c.noLeidos}</span>}
           </div>
           <div className={styles.ultimo}>{c.ultimo}</div>
-        </motion.button>
+        </button>
       ))}
     </div>
   );

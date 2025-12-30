@@ -2,8 +2,8 @@ import { z } from 'zod';
 import { apiFetch, setTokens as setTokensInternal, clearTokens as clearTokensInternal } from './client';
 import { ActivoSchema, MensajeSchema, NotificacionSchema, PrecioSchema, TokenSchema, UsuarioSchema } from './schemas';
 
-export type Credenciales = { email: string; password: string };
-export type RegistroPayload = Credenciales & { nombre: string };
+export type Credenciales = { correo: string; clave: string };
+export type RegistroPayload = { nombre: string; apellido: string; correo: string; clave: string };
 export type AlertaPayload = { ticker: string; umbral: number; direccion: 'arriba' | 'abajo' };
 export type MensajePayload = { contenido: string };
 export type EventoPayload = { titulo: string; fecha: string; descripcion?: string };

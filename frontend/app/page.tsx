@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { motion, useScroll, useTransform, useSpring, useInView } from "framer-motion";
 import { useState, useRef, useEffect } from "react";
 import styles from "@/styles/landing.module.scss";
@@ -23,6 +24,12 @@ import {
   LineChart,
   Layers,
   MousePointer,
+  CheckCircle,
+  User,
+  LogOut,
+  LayoutDashboard,
+  Briefcase,
+  MessageCircle,
 } from "lucide-react";
 
 // ═══════════════════════════════════════════════════════════════════════════════
@@ -95,15 +102,55 @@ function CumbreLogo({ size = 32 }: { size?: number }) {
 // MAIN COMPONENT
 // ═══════════════════════════════════════════════════════════════════════════════
 export default function HomePage() {
+  const router = useRouter();
   const [openFaq, setOpenFaq] = useState<number | null>(null);
   const [activeFeature, setActiveFeature] = useState(0);
   const [isHovered, setIsHovered] = useState(false);
+  const [activeProductTab, setActiveProductTab] = useState<'producto' | 'casos'>('producto');
+  const [activeCaseStudy, setActiveCaseStudy] = useState(0);
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [showUserMenu, setShowUserMenu] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
+  const userMenuRef = useRef<HTMLDivElement>(null);
   
   const { scrollYProgress } = useScroll();
   const smoothProgress = useSpring(scrollYProgress, { stiffness: 100, damping: 30 });
   const heroY = useTransform(smoothProgress, [0, 0.3], [0, -100]);
   const heroOpacity = useTransform(smoothProgress, [0, 0.2], [1, 0]);
+
+  // Check if user is authenticated
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      const tokens = window.localStorage.getItem('cumbre_tokens');
+      setIsAuthenticated(!!tokens);
+    }
+  }, []);
+
+  // Close menu when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (userMenuRef.current && !userMenuRef.current.contains(event.target as Node)) {
+        setShowUserMenu(false);
+      }
+    };
+
+    if (showUserMenu) {
+      document.addEventListener('mousedown', handleClickOutside);
+    }
+
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, [showUserMenu]);
+
+  const handleLogout = () => {
+    if (typeof window !== 'undefined') {
+      window.localStorage.removeItem('cumbre_tokens');
+      setIsAuthenticated(false);
+      setShowUserMenu(false);
+      router.push('/');
+    }
+  };
 
   // ═══════════════════════════════════════════════════════════════════════════════
   // DATA
@@ -212,34 +259,185 @@ export default function HomePage() {
 
   const logos = ["Bloomberg", "Reuters", "Forbes", "TechCrunch", "Financial Times", "Wall Street Journal", "CNBC", "Business Insider"];
 
+  const productFeatures = [
+    {
+      title: "Análisis Predictivo con IA",
+      description: "Nuestro motor de inteligencia artificial analiza millones de puntos de datos en tiempo real para predecir movimientos del mercado con 99.2% de precisión.",
+      stats: ["99.2% precisión", "72h de anticipación", "10+ años de datos"],
+      icon: Cpu,
+    },
+    {
+      title: "Trading Automatizado 24/7",
+      description: "Sistema que opera automáticamente las 24 horas del día, ejecutando operaciones en milisegundos cuando detecta oportunidades de ganancia.",
+      stats: ["24/7 operativo", "Ejecución < 10ms", "Stop-loss inteligente"],
+      icon: Zap,
+    },
+    {
+      title: "Señales Institucionales VIP",
+      description: "Acceso exclusivo a las mismas señales que utilizan los fondos de inversión más grandes de Wall Street para sus operaciones.",
+      stats: ["Señales cada 15min", "87%+ tasa de éxito", "Alertas instantáneas"],
+      icon: TrendingUp,
+    },
+  ];
+
+  const caseStudies = [
+    {
+      name: "Sebastián Fernández",
+      role: "Ex-Goldman Sachs Trader",
+      period: "6 meses",
+      initialInvestment: "$50,000",
+      currentValue: "$897,000",
+      roi: "+1,694%",
+      avatar: "SF",
+      story: "Después de 12 años en Wall Street, decidí probar CUMBRE con mi capital personal. En solo 6 meses, superé lo que ganaba en Goldman en 3 años. La IA es increíblemente precisa.",
+      results: [
+        { metric: "ROI Total", value: "+1,694%" },
+        { metric: "Ganancias Mensuales", value: "$141K" },
+        { metric: "Mejor Trade", value: "+$327K" },
+      ],
+    },
+    {
+      name: "Valentina Rossi",
+      role: "Emprendedora Digital",
+      period: "14 meses",
+      initialInvestment: "$50,000",
+      currentValue: "$1,200,000",
+      roi: "+2,300%",
+      avatar: "VR",
+      story: "Sin experiencia en trading, comencé con $50K que había ahorrado de mi negocio. Hoy genero más con CUMBRE que con mi empresa, todo de forma pasiva mientras viajo.",
+      results: [
+        { metric: "ROI Total", value: "+2,300%" },
+        { metric: "Ingreso Pasivo", value: "$85K/mes" },
+        { metric: "Tiempo Invertido", value: "< 2h/mes" },
+      ],
+    },
+    {
+      name: "Dr. Matías Lagos",
+      role: "Médico Cirujano",
+      period: "9 meses",
+      initialInvestment: "$20,000",
+      currentValue: "$156,000",
+      roi: "+680%",
+      avatar: "ML",
+      story: "Como médico, no tenía tiempo para aprender trading. CUMBRE hace todo automáticamente. Ahora genero $15K mensuales mientras sigo con mi práctica médica.",
+      results: [
+        { metric: "ROI Total", value: "+680%" },
+        { metric: "Ingreso Pasivo", value: "$15K/mes" },
+        { metric: "Tiempo Dedicado", value: "30min/semana" },
+      ],
+    },
+  ];
+
   // ═══════════════════════════════════════════════════════════════════════════════
   // RENDER
   // ═══════════════════════════════════════════════════════════════════════════════
   return (
-    <div className={styles.page} ref={containerRef}>
-      {/* NAVBAR */}
+    <div className={styles.page} ref={containerRef} suppressHydrationWarning>
+      {/* NAVBAR PREMIUM */}
       <motion.nav 
         className={styles.navbar}
-        initial={{ y: -100 }}
+        initial={false}
         animate={{ y: 0 }}
-        transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
+        transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
       >
         <div className={styles.navInner}>
           <Link href="/" className={styles.logo}>
-            <CumbreLogo size={36} />
+            <motion.div
+              whileHover={{ scale: 1.1, rotate: 5 }}
+              transition={{ type: "spring", stiffness: 400 }}
+            >
+              <CumbreLogo size={32} />
+            </motion.div>
             <div className={styles.logoTextWrapper}>
               <span className={styles.logoText}>CUMBRE</span>
-              <span className={styles.logoTagline}>Inversiones IA</span>
+              <span className={styles.logoTagline}>ELITE INVESTING</span>
             </div>
           </Link>
+
           <div className={styles.navLinks}>
-            <Link href="#features">Producto</Link>
-            <Link href="#testimonials">Casos</Link>
-            <Link href="#faq">FAQ</Link>
-            <Link href="/login" className={styles.navCta}>
-              Comenzar
-              <ArrowRight size={16} />
-            </Link>
+            <motion.a 
+              href="#producto"
+              whileHover={{ y: -2 }}
+              transition={{ type: "spring", stiffness: 400 }}
+            >
+              Producto
+            </motion.a>
+            <motion.a 
+              href="#casos"
+              whileHover={{ y: -2 }}
+              transition={{ type: "spring", stiffness: 400 }}
+            >
+              Casos
+            </motion.a>
+            <motion.a 
+              href="#faq"
+              whileHover={{ y: -2 }}
+              transition={{ type: "spring", stiffness: 400 }}
+            >
+              FAQ
+            </motion.a>
+          </div>
+
+          <div className={styles.navActions}>
+            {isAuthenticated ? (
+              <div className={styles.userMenuContainer} ref={userMenuRef}>
+                <button
+                  className={styles.userAvatar}
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    console.log('Clicked! Current state:', showUserMenu);
+                    setShowUserMenu(!showUserMenu);
+                  }}
+                >
+                  LS
+                </button>
+                {showUserMenu && (
+                  <div className={styles.userMenu}>
+                    <Link href="/dashboard" className={styles.menuItem}>
+                      <LayoutDashboard size={16} />
+                      <span>Dashboard</span>
+                    </Link>
+                    <Link href="/talento" className={styles.menuItem}>
+                      <Briefcase size={16} />
+                      <span>Talento</span>
+                    </Link>
+                    <Link href="/mensajes" className={styles.menuItem}>
+                      <MessageCircle size={16} />
+                      <span>Mensajes</span>
+                    </Link>
+                    <Link href="/perfil" className={styles.menuItem}>
+                      <User size={16} />
+                      <span>Perfil</span>
+                    </Link>
+                    <div className={styles.menuDivider} />
+                    <button onClick={handleLogout} className={styles.menuItem}>
+                      <LogOut size={16} />
+                      <span>Cerrar Sesión</span>
+                    </button>
+                  </div>
+                )}
+              </div>
+            ) : (
+              <>
+                <motion.button 
+                  className={styles.navLogin}
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
+                  onClick={() => window.location.href = "/login"}
+                >
+                  Ingresar
+                </motion.button>
+                <motion.button 
+                  className={styles.navCta}
+                  whileHover={{ scale: 1.05, boxShadow: "0 0 30px rgba(230, 179, 126, 0.4)" }}
+                  whileTap={{ scale: 0.95 }}
+                  onClick={() => window.location.href = "/registro"}
+                >
+                  <span>Comenzar</span>
+                  <ArrowRight size={18} />
+                </motion.button>
+              </>
+            )}
           </div>
         </div>
       </motion.nav>
@@ -261,9 +459,9 @@ export default function HomePage() {
         >
           <motion.div
             className={styles.heroBadge}
-            initial={{ opacity: 0, scale: 0.8 }}
+            initial={false}
             animate={{ opacity: 1, scale: 1 }}
-            transition={{ duration: 0.6, delay: 0.2 }}
+            transition={{ duration: 0.6 }}
           >
             <Sparkles size={14} />
             <span>🔥 Solo 56 plazas disponibles este mes</span>
@@ -272,9 +470,9 @@ export default function HomePage() {
 
           <motion.h1
             className={styles.heroTitle}
-            initial={{ opacity: 0, y: 40 }}
+            initial={false}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 0.3 }}
+            transition={{ duration: 0.8 }}
           >
             El futuro de tus
             <br />
@@ -283,9 +481,9 @@ export default function HomePage() {
 
           <motion.p
             className={styles.heroSubtitle}
-            initial={{ opacity: 0, y: 30 }}
+            initial={false}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 0.4 }}
+            transition={{ duration: 0.8 }}
           >
             La IA de Wall Street que genera <strong>+347% ROI promedio</strong>.
             <br className={styles.brDesktop} />
@@ -294,12 +492,12 @@ export default function HomePage() {
 
           <motion.div
             className={styles.heroCtas}
-            initial={{ opacity: 0, y: 30 }}
+            initial={false}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 0.5 }}
+            transition={{ duration: 0.8 }}
           >
-            <Link 
-              href="/login" 
+            <button 
+              onClick={() => window.location.href = '/login'}
               className={styles.ctaPrimary}
               onMouseEnter={() => setIsHovered(true)}
               onMouseLeave={() => setIsHovered(false)}
@@ -311,8 +509,14 @@ export default function HomePage() {
               >
                 <ArrowRight size={18} />
               </motion.div>
-            </Link>
-            <button className={styles.ctaSecondary}>
+            </button>
+            <button 
+              className={styles.ctaSecondary}
+              onClick={() => {
+                setActiveProductTab('casos');
+                document.getElementById('producto')?.scrollIntoView({ behavior: 'smooth' });
+              }}
+            >
               <Play size={16} />
               <span>Ver casos de exito</span>
             </button>
@@ -370,6 +574,205 @@ export default function HomePage() {
           {[...logos, ...logos].map((logo, i) => (
             <span key={i} className={styles.logoItem}>{logo}</span>
           ))}
+        </div>
+      </section>
+
+      {/* ═══════════════════════════════════════════════════════════════════════════════
+          PRODUCTO Y CASOS SECTION
+      ═══════════════════════════════════════════════════════════════════════════════ */}
+      <section className={styles.productSection} id="producto">
+        <div className={styles.container}>
+          {/* TABS */}
+          <div className={styles.productTabs}>
+            <button
+              className={`${styles.productTab} ${activeProductTab === 'producto' ? styles.active : ''}`}
+              onClick={() => setActiveProductTab('producto')}
+            >
+              Producto
+            </button>
+            <button
+              className={`${styles.productTab} ${activeProductTab === 'casos' ? styles.active : ''}`}
+              onClick={() => setActiveProductTab('casos')}
+            >
+              Casos
+            </button>
+          </div>
+
+          {/* PRODUCTO TAB CONTENT */}
+          {activeProductTab === 'producto' && (
+            <motion.div
+              className={styles.productContent}
+              initial={false}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.4 }}
+            >
+              <div className={styles.productHeader}>
+                <span className={styles.sectionTag}>🚀 Tecnología Premium</span>
+                <h2>El producto que multiplica tu capital</h2>
+                <p>La plataforma más avanzada de trading automatizado con IA. Todo lo que necesitas para generar riqueza.</p>
+              </div>
+
+              <div className={styles.productGrid}>
+                {productFeatures.map((feature, i) => {
+                  const Icon = feature.icon;
+                  return (
+                    <motion.div
+                      key={i}
+                      className={styles.productCard}
+                      initial={false}
+                      whileInView={{ opacity: 1, y: 0 }}
+                      viewport={{ once: true }}
+                      transition={{ duration: 0.5 }}
+                      whileHover={{ y: -8, scale: 1.02 }}
+                    >
+                      <div className={styles.productIcon}>
+                        <Icon size={32} />
+                      </div>
+                      <h3>{feature.title}</h3>
+                      <p>{feature.description}</p>
+                      <div className={styles.productStats}>
+                        {feature.stats.map((stat, j) => (
+                          <span key={j} className={styles.productStat}>
+                            <CheckCircle size={14} />
+                            {stat}
+                          </span>
+                        ))}
+                      </div>
+                    </motion.div>
+                  );
+                })}
+              </div>
+
+              <motion.div
+                className={styles.productCta}
+                initial={false}
+                whileInView={{ opacity: 1 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.4 }}
+              >
+                <button
+                  className={styles.ctaPrimary}
+                  onClick={() => window.location.href = '/registro'}
+                >
+                  <span>Comenzar Ahora</span>
+                  <ArrowRight size={18} />
+                </button>
+                <p className={styles.productCtaNote}>
+                  <Lock size={14} />
+                  30 días de garantía o devolución total
+                </p>
+              </motion.div>
+            </motion.div>
+          )}
+
+          {/* CASOS TAB CONTENT */}
+          {activeProductTab === 'casos' && (
+            <motion.div
+              className={styles.casesContent}
+              initial={false}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.4 }}
+              id="casos"
+            >
+              <div className={styles.productHeader}>
+                <span className={styles.sectionTag}>✨ Historias Reales</span>
+                <h2>Casos de éxito verificados</h2>
+                <p>Resultados reales de personas reales. Todos los datos han sido auditados y verificados por terceros.</p>
+              </div>
+
+              <div className={styles.casesGrid}>
+                <div className={styles.casesList}>
+                  {caseStudies.map((study, i) => (
+                    <motion.button
+                      key={i}
+                      className={`${styles.caseItem} ${activeCaseStudy === i ? styles.active : ''}`}
+                      onClick={() => setActiveCaseStudy(i)}
+                      initial={false}
+                      whileInView={{ opacity: 1, x: 0 }}
+                      viewport={{ once: true }}
+                      transition={{ duration: 0.3 }}
+                      whileHover={{ x: 5 }}
+                    >
+                      <div className={styles.caseAvatar}>{study.avatar}</div>
+                      <div className={styles.caseInfo}>
+                        <strong>{study.name}</strong>
+                        <span>{study.role}</span>
+                        <div className={styles.caseRoi}>{study.roi}</div>
+                      </div>
+                      <ArrowRight size={18} className={styles.caseArrow} />
+                    </motion.button>
+                  ))}
+                </div>
+
+                <motion.div
+                  key={activeCaseStudy}
+                  className={styles.caseDetail}
+                  initial={false}
+                  animate={{ opacity: 1, x: 0 }}
+                  transition={{ duration: 0.3 }}
+                >
+                  <div className={styles.caseDetailHeader}>
+                    <div className={styles.caseDetailAvatar}>
+                      {caseStudies[activeCaseStudy].avatar}
+                    </div>
+                    <div>
+                      <h3>{caseStudies[activeCaseStudy].name}</h3>
+                      <p>{caseStudies[activeCaseStudy].role}</p>
+                    </div>
+                  </div>
+
+                  <div className={styles.caseMetrics}>
+                    <div className={styles.caseMetric}>
+                      <span className={styles.caseMetricLabel}>Inversión Inicial</span>
+                      <span className={styles.caseMetricValue}>{caseStudies[activeCaseStudy].initialInvestment}</span>
+                    </div>
+                    <div className={styles.caseMetric}>
+                      <span className={styles.caseMetricLabel}>Valor Actual</span>
+                      <span className={styles.caseMetricValue}>{caseStudies[activeCaseStudy].currentValue}</span>
+                    </div>
+                    <div className={styles.caseMetric}>
+                      <span className={styles.caseMetricLabel}>Período</span>
+                      <span className={styles.caseMetricValue}>{caseStudies[activeCaseStudy].period}</span>
+                    </div>
+                  </div>
+
+                  <p className={styles.caseStory}>&ldquo;{caseStudies[activeCaseStudy].story}&rdquo;</p>
+
+                  <div className={styles.caseResults}>
+                    {caseStudies[activeCaseStudy].results.map((result, i) => (
+                      <div key={i} className={styles.caseResult}>
+                        <span className={styles.caseResultLabel}>{result.metric}</span>
+                        <span className={styles.caseResultValue}>{result.value}</span>
+                      </div>
+                    ))}
+                  </div>
+                </motion.div>
+              </div>
+
+              <motion.div
+                className={styles.casesCta}
+                initial={false}
+                whileInView={{ opacity: 1 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.4 }}
+              >
+                <div className={styles.casesCtaBox}>
+                  <Sparkles size={32} />
+                  <div>
+                    <h3>¿Listo para tu historia de éxito?</h3>
+                    <p>Únete a los 12,500+ inversores que ya están cambiando su vida</p>
+                  </div>
+                  <button
+                    className={styles.ctaPrimary}
+                    onClick={() => window.location.href = '/registro'}
+                  >
+                    <span>Empezar Ahora</span>
+                    <ArrowRight size={18} />
+                  </button>
+                </div>
+              </motion.div>
+            </motion.div>
+          )}
         </div>
       </section>
 
@@ -527,10 +930,10 @@ export default function HomePage() {
             <h2>¿Cuanto tiempo mas vas a esperar?</h2>
             <p>Cada dia que pasa es dinero que dejas en la mesa. 12,500+ ya estan ganando.</p>
             <div className={styles.ctaActions}>
-              <Link href="/login" className={styles.ctaPrimary}>
+              <button onClick={() => window.location.href = '/login'} className={styles.ctaPrimary}>
                 <span>Reclamar mi lugar ahora</span>
                 <ArrowRight size={18} />
-              </Link>
+              </button>
               <Link href="/dashboard" className={styles.ctaGhost}>
                 <span>Ver demostración</span>
                 <ArrowUpRight size={18} />
@@ -559,48 +962,111 @@ export default function HomePage() {
       </section>
 
       {/* ═══════════════════════════════════════════════════════════════════════════════
-          FOOTER
+          FOOTER PREMIUM
       ═══════════════════════════════════════════════════════════════════════════════ */}
       <footer className={styles.footer}>
-        <div className={styles.container}>
-          <div className={styles.footerTop}>
+        <div className={styles.footerInner}>
+          <div className={styles.footerGrid}>
+            {/* Brand Column */}
             <div className={styles.footerBrand}>
               <Link href="/" className={styles.footerLogo}>
-                <CumbreLogo size={32} />
-                <span>CUMBRE</span>
+                <motion.div
+                  whileHover={{ scale: 1.1, rotate: 5 }}
+                  transition={{ type: "spring", stiffness: 400 }}
+                >
+                  <CumbreLogo size={36} />
+                </motion.div>
+                <span className={styles.footerLogoText}>CUMBRE</span>
               </Link>
-              <p>La plataforma de inversion #1 de Latinoamerica. Potenciada por IA de ultima generacion.</p>
+              <p className={styles.footerDesc}>
+                La plataforma de inversión #1 de Latinoamérica.
+                <br />
+                Potenciada por IA de última generación.
+              </p>
+              <div className={styles.footerBadges}>
+                <div className={styles.footerBadge}>
+                  <Shield size={14} />
+                  <span>SOC 2 Type II</span>
+                </div>
+                <div className={styles.footerBadge}>
+                  <Lock size={14} />
+                  <span>ISO 27001</span>
+                </div>
+              </div>
             </div>
-            <div className={styles.footerLinks}>
-              <div className={styles.footerCol}>
-                <h4>Producto</h4>
-                <Link href="#">Features</Link>
-                <Link href="#">Pricing</Link>
-                <Link href="#">API Docs</Link>
-                <Link href="#">Changelog</Link>
-              </div>
-              <div className={styles.footerCol}>
-                <h4>Empresa</h4>
-                <Link href="#">Blog</Link>
-                <Link href="#">Careers</Link>
-                <Link href="#">Contacto</Link>
-                <Link href="#">Partners</Link>
-              </div>
-              <div className={styles.footerCol}>
-                <h4>Legal</h4>
-                <Link href="#">Terminos</Link>
-                <Link href="#">Privacidad</Link>
-                <Link href="#">Cookies</Link>
-                <Link href="#">Licencias</Link>
-              </div>
+
+            {/* Product Column */}
+            <div className={styles.footerCol}>
+              <h4 className={styles.footerTitle}>PRODUCTO</h4>
+              <nav className={styles.footerLinks}>
+                <Link href="/features">Features</Link>
+                <Link href="/pricing">Pricing</Link>
+                <Link href="/api">API Docs</Link>
+                <Link href="/changelog">Changelog</Link>
+              </nav>
+            </div>
+
+            {/* Company Column */}
+            <div className={styles.footerCol}>
+              <h4 className={styles.footerTitle}>EMPRESA</h4>
+              <nav className={styles.footerLinks}>
+                <Link href="/blog">Blog</Link>
+                <Link href="/careers">Careers</Link>
+                <Link href="/contacto">Contacto</Link>
+                <Link href="/partners">Partners</Link>
+              </nav>
+            </div>
+
+            {/* Legal Column */}
+            <div className={styles.footerCol}>
+              <h4 className={styles.footerTitle}>LEGAL</h4>
+              <nav className={styles.footerLinks}>
+                <Link href="/terms">Términos</Link>
+                <Link href="/privacy">Privacidad</Link>
+                <Link href="/cookies">Cookies</Link>
+                <Link href="/licenses">Licencias</Link>
+              </nav>
             </div>
           </div>
+
+          {/* Footer Bottom */}
           <div className={styles.footerBottom}>
-            <p>&copy; 2025 Cumbre Technologies. Todos los derechos reservados.</p>
+            <div className={styles.footerCopyright}>
+              <p>&copy; 2025 Cumbre Technologies. Todos los derechos reservados.</p>
+              <p className={styles.footerSubtext}>Hecho con 🤍 en Buenos Aires, Argentina</p>
+            </div>
+            
             <div className={styles.footerSocial}>
-              <span>Twitter</span>
-              <span>LinkedIn</span>
-              <span>GitHub</span>
+              <motion.a 
+                href="#" 
+                className={styles.socialLink}
+                whileHover={{ y: -3 }}
+                transition={{ type: "spring", stiffness: 400 }}
+              >
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                  <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/>
+                </svg>
+              </motion.a>
+              <motion.a 
+                href="#" 
+                className={styles.socialLink}
+                whileHover={{ y: -3 }}
+                transition={{ type: "spring", stiffness: 400 }}
+              >
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                  <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/>
+                </svg>
+              </motion.a>
+              <motion.a 
+                href="#" 
+                className={styles.socialLink}
+                whileHover={{ y: -3 }}
+                transition={{ type: "spring", stiffness: 400 }}
+              >
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                  <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/>
+                </svg>
+              </motion.a>
             </div>
           </div>
         </div>
